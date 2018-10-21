@@ -1,0 +1,1 @@
+Stub folder for different implementations of AI algo
