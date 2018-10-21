@@ -12,7 +12,27 @@ class TestGame(unittest.TestCase):
 
     def test_game_tiles_match(self):
         self.assertEqual(144, Game.SIZE_SIMPLE * 3 * 4 + Game.SIZE_HONOR_DRAGON * 4 + Game.SIZE_HONOR_WIND * 4 + 8, 'expect 144 mahjong tiles')
+        
+        g = Game()
+        self.assertEqual(144, len(g.tiles), 'expect an instantiated game to have 144 tiles')
         return
+
+    def test_game_bootstrap(self):
+        g = Game()
+        g.start()
+
+        self.assertEqual(4, len(g.hands), 'expect 4 players')
+        self.assertEqual(92, len(g.tiles), 'expect 92 tiles remaining after dealing the initial tiles')
+        self.assertEqual(13, len(g.hands[0]), 'expect player 0 to have 13 tiles after being dealt the initial tiles')
+
+        g.draw(0, 1)
+        self.assertEqual(14, len(g.hands[0]), 'expect player 0 to have 14 tiles after drawing 1')
+        self.assertEqual(91, len(g.tiles), 'expect there to be 91 tiles remaining after player 0 draws 1')
+
+        g.discard(0, 0)
+        self.assertEqual(13, len(g.hands[0]), 'expect player 0 to have 13 tiles after discarding 1')
+        self.assertEqual(91, len(g.tiles), 'expect there to be 91 tiles remaining after player 0 draws and discards 1')
+
 
     def test_game_win_condition(self):
         hand1 = [(Game.TILE_SIMPLE_DOT, 1)]

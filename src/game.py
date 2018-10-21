@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import random
 
 class Game():
     """
@@ -37,7 +38,98 @@ class Game():
     SIZE_EYE_NEEDED   = 1
     SIZE_MELD_NEEDED  = 4
 
+    PLAYER_NUM = 4
+
     def __init__(self):
+        self.hands = [[] for i in range(Game.PLAYER_NUM)]
+        self.tiles = []
+        self.discarded_tile = None
+        self.turn_owner = 0
+
+        self.init_tiles()
+        self.is_running = False
+        return
+
+    #########################
+    # Game actions
+    #########################
+    def init_tiles(self):
+        """
+        Initialize the 144 tiles
+        """
+        for simple in [Game.TILE_SIMPLE_DOT, Game.TILE_SIMPLE_BAMBOO, Game.TILE_SIMPLE_CHAR]:
+            for value in range(Game.SIZE_SIMPLE):
+                self.tiles += [(simple, value) for i in range(4)]
+
+        for value in ['east', 'west', 'north', 'south']:
+            self.tiles += [(Game.TILE_HONOR_WIND, value) for i in range(4)]
+            self.tiles += [(Game.TILE_BONUS_FLOWER, value)]
+            self.tiles += [(Game.TILE_BONUS_SEASON, value)]
+
+        for value in ['red', 'green', 'white']:
+            self.tiles += [(Game.TILE_HONOR_DRAGON, value) for i in range(4)]
+
+        random.shuffle(self.tiles)
+        return
+
+    def draw(self, idx, num):
+        """
+        Draw num tiles for player idx
+        @param  idx int the player index
+        @param  num int the number of tiles to draw
+        """
+        if num > len(self.tiles):
+            raise RuntimeError('not enough tiles left')
+        self.hands[idx] += self.tiles[:num]
+        del self.tiles[:num]
+        return
+
+    def discard(self, player_idx, tile_idx):
+        """
+        Draw num tiles for player idx
+        @param  player_idx int the player index
+        @param  tile_idx   int the index of tile to be discarded
+        """
+        if tile_idx > len(self.hands[player_idx]) or tile_idx < 0:
+            raise RuntimeError('invalid index')
+        self.discarded_tile = self.hands[player_idx][tile_idx]
+        del self.hands[player_idx][tile_idx]
+        return
+
+    def start(self):
+        """
+        Bootstrap a game
+        """
+        self.is_running = True
+        for i in range(Game.PLAYER_NUM):
+            self.draw(i, Game.SIZE_HAND)
+        return
+
+    def action(self, player_idx, action):
+        """
+        After obtaining the list of legal actions, take one from the list
+        according to player decision, then move the game to the next
+        'draw-discard'
+
+        @param  player_idx int player index
+        @param  action     str the action to take (one of 'declare-victory',
+                pong, kong, or chow)
+        """
+        raise RuntimeError('not implemented')
+        return
+
+    #########################
+    # Checks and helpers
+    #########################
+    @staticmethod
+    def determine_legal_actions(self):
+        """
+        Determines the ordered set of legal actions.
+          Any player picks up the discarded tile and declares victory ->
+          Any player picks up the discarded tile by Pong or Kong -->
+          Next player picks up the discarded tile by Chow
+        """
+        raise RuntimeError('not implemented')
         return
 
     @staticmethod
