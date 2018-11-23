@@ -1,11 +1,9 @@
-# Mahjong
+# [Mahjong](mahjong)
 
 Python implementation of [Mahjong](https://en.wikipedia.org/wiki/Mahjong#Old_Hong_Kong_Mahjong).
 
-### How to use
+# [Poker](poker)
 
-### What to expect
-
-### Roadmap
+Python implementation of poker
 
 zhehao@remap.ucla.edu
